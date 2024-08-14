@@ -20,12 +20,16 @@ public with sharing class IncomingLeadHandler implements IHandleMessages {
      */
     public void handleMessage(String channel, Object data) {
         // TODO: Complete this method
+        
+        // Null arguments validation
         ArgumentNullException.throwIfNull(channel, 'channel');
         ArgumentNullException.throwIfNull(data, 'data');
         
+        // Checks if data is a Lead instance and the class instance is subscribed to the received channel
         if(String.isNotBlank(channel) && getSubscribedChannels().contains(channel) && data instanceOf Lead){
             Lead lead = (Lead)data;
 
+            // Validates FirstName as required in the excercise explanation
             if(lead.FirstName != null){
                 insert lead;
             }else{

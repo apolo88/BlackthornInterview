@@ -3,6 +3,7 @@
  */
 public with sharing class PubSubService {
     
+    // Segment the implementationClasses by channel to optimize emit method
     private Map<String, List<IHandleMessages>> implementationsByChannel;
 
     private PubSubService() { 
@@ -31,6 +32,8 @@ public with sharing class PubSubService {
      */
     public void subscribe(IHandleMessages implementation) {
         // TODO: Complete this method
+        
+        // For each of the channels that the implementation instance was subscribed it is stored in the correct channel list
         for(String channel : implementation.getSubscribedChannels()){
             if(implementationsByChannel.containsKey(channel)){
                 implementationsByChannel.get(channel).add(implementation);
@@ -47,6 +50,8 @@ public with sharing class PubSubService {
      */
     public void unsubscribe(IHandleMessages implementation) {
         // TODO: Complete this method
+        
+        // Looks for each of the channels were was subscribed and removes the instance from each of the channels
         for(String channel : implementation.getSubscribedChannels()){
             if(implementationsByChannel.containsKey(channel)){
                 List<IHandleMessages> implementations = implementationsByChannel.get(channel);
@@ -67,6 +72,8 @@ public with sharing class PubSubService {
      */
     public void emit(String channel, Object data) {
         // TODO: Complete this method
+
+        // If the channel is contained on the map, then executes only the handlemessage of the instances subscribed to that channel
         if(String.isNotBlank(channel) && implementationsByChannel.containsKey(channel)){
             for(IHandleMessages implementation : implementationsByChannel.get(channel)){
                 implementation.handleMessage(channel, data);

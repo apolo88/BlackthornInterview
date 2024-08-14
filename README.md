@@ -1,18 +1,9 @@
-# Salesforce DX Project: Next Steps
+# Salesforce Blackthorn Interview
 
-Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
+Repository Owner: Alejandro Spinelli
 
-## How Do You Plan to Deploy Your Changes?
+## Concerns and solution explanation
 
-Do you want to deploy a set of changes, or create a self-contained application? Choose a [development model](https://developer.salesforce.com/tools/vscode/en/user-guide/development-models).
-
-## Configure Your Salesforce DX Project
-
-The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
-
-## Read All About It
-
-- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
-- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+- I was forced to modify the PubSubServiceTest class in line 102 because the insert of the Lead was failing in my Salesforce playground due to the Company required field missing. I ended up setting a 'Test' value on the Company field.
+- Regarding the PubSub solution, I considered using a Map (PubService.cls line 7) instead of a regular list to store the IHandleMessages instances segmented by channel, the decision I took this approach was to improve the performance on the emit method doing less iterations in the loop and executing the handlemessage method only on the necessary instances, instead of looping all instances and trying to execute the handleMessage method in all of them. With this map approach, probably the performance on the subscribe and unsubscribe methods is not so efficient compared to the regular list approach, but I consider that the frequency on the call to the emit method is gonna be much higher than the subscribe and unsubscribe methods, so will end up having a better overall performance.
+- Based on the previous point it seems that probably the argument "channel" on the handleMessage method inside the IHandleMessages.cls doesn't have sense anymore and could be removed (could only make sense for debug and notifications purpose about the current channel), but I didn't want to modify the structure of the code due to the exercise statement.
